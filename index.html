@@ -6,20 +6,23 @@ canvas {width: 100%; height: 100%;}
 <canvas></canvas>
 <script type="module">
 let canvas = document.querySelector('canvas')
-let c = canvas.getContext('2d')
+let gl = canvas.getContext('webgl')
 new ResizeObserver(function (entries) {
     canvas.width = canvas.clientWidth * devicePixelRatio
     canvas.height = canvas.clientHeight * devicePixelRatio
 }).observe(canvas)
+gl.viewport(0, 0, canvas.width, canvas.height)
+gl.enable(gl.SCISSOR_TEST);
 function frame() {
     requestAnimationFrame(frame)
     for (let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
             if (Math.random() < 0.5)
-                c.fillStyle = 'white'
+                gl.clearColor(0, 0, 0, 1)
             else
-                c.fillStyle = 'black'
-            c.fillRect(x, y, 1, 1)
+                gl.clearColor(1, 1, 1, 1)
+            gl.scissor(x, y, 1, 1)
+            gl.clear(gl.COLOR_BUFFER_BIT)
             x++
         }
         y++
