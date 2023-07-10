@@ -11,11 +11,22 @@ new ResizeObserver(function (entries) {
     canvas.width = canvas.clientWidth * devicePixelRatio
     canvas.height = canvas.clientHeight * devicePixelRatio
 }).observe(canvas)
+function rand(seed) {
+    let m = 2531131
+    let a = 1111731
+    let c = 1737153
+    let z = seed || 3
+    return function() {
+        z = (a * z + c) % m
+        return z / m
+    }
+}
+let r = rand(2312)
 function frame() {
     requestAnimationFrame(frame)
     for (let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
-            if (Math.random() < 0.5)
+            if (r.call() < 0.5)
                 c.fillStyle = 'white'
             else
                 c.fillStyle = 'black'
